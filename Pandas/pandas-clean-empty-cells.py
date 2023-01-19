@@ -13,6 +13,11 @@ print(cleaned_df)
 # Replace null values with set number
 # data_df.fillna(130, inplace = True)
 
-# Replace null values in specific colimn
+# Replace null values in specific column
 # df["Calories"].fillna(130, inplace = True)
 
+# Replace null values in specific column with mean, median or mode
+# calories_mean = df["Calories"].mean()
+# calories_median = df["Calories"].median()
+# calories_mode = df["Calories"].mode()[0]
+# df["Calories"].fillna(calories_mean, inplace = True)
