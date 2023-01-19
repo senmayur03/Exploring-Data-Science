@@ -43,6 +43,27 @@ def average_point(point_list):
 
     return (x_average, y_average)
 
+# Display the clusters on a plot including the centroid
+def display_clusters(centroid_dict, centroids):
+    centroid_list = np.array(list(map(np.array, centroids)))
+    cluster_list = []
+    for centroid in centroids:
+        cluster = np.array(list(map(np.array, centroid_dict[centroid])))
+        cluster_list.append(cluster)
+    for cluster in cluster_list:
+        plt.scatter(
+            cluster[:, 0], cluster[:, 1],
+            s=50, c='lightgreen',
+            marker='s', edgecolor='black',
+            label='cluster 1'
+        )
+    plt.scatter(
+        centroid_list[:, 0], centroid_list[:, 1],
+        s=250, marker='*',
+        c='red', edgecolor='black',
+        label='centroids'
+    )
+    plt.show()
 
 def k_means_clustering(data_points, number_of_centroids):
     tuple_list = convert_array_to_tuples(data_points)
@@ -68,40 +89,7 @@ def k_means_clustering(data_points, number_of_centroids):
             new_centroids.append(average_point(point_list))
         centroids = new_centroids
 
-    # Visualise the clusters, currently hardcoded for 3 clusters.
-    centroid_list = np.array(list(map(np.array, centroids)))
-    centroid_1 = np.array(list(map(np.array, centroid_dict[centroids[0]])))
-    centroid_2 = np.array(list(map(np.array, centroid_dict[centroids[1]])))
-    centroid_3 = np.array(list(map(np.array, centroid_dict[centroids[2]])))
-
-    plt.scatter(
-        centroid_1[:, 0], centroid_1[:, 1],
-        s=50, c='lightgreen',
-        marker='s', edgecolor='black',
-        label='cluster 1'
-    )
-
-    plt.scatter(
-        centroid_2[:, 0], centroid_2[:, 1],
-        s=50, c='orange',
-        marker='o', edgecolor='black',
-        label='cluster 2'
-    )
-
-    plt.scatter(
-        centroid_3[:, 0], centroid_3[:, 1],
-        s=50, c='lightblue',
-        marker='v', edgecolor='black',
-        label='cluster 3'
-    )
-
-    plt.scatter(
-        centroid_list[:, 0], centroid_list[:, 1],
-        s=250, marker='*',
-        c='red', edgecolor='black',
-        label='centroids'
-    )
-
-    plt.show()
+    # Visualise the clusters.
+    display_clusters(centroid_dict, centroids)
 
 k_means_clustering(X, 3)
