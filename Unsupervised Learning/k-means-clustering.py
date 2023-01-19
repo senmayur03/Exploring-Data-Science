@@ -9,6 +9,12 @@ X, y = make_blobs(
     centers = 3, cluster_std = 0.5, 
     shuffle = True, random_state = 0
 )
+def random_hex_color():
+    hex_values = "123456789ABCDEF"
+    hex_value = "#"
+    for _ in range(6):
+        hex_value = hex_value + random.choice(hex_values)
+    return hex_value
 
 # Convert a numpy array into a list of tuples.
 def convert_array_to_tuples(numpy_array):
@@ -43,17 +49,26 @@ def average_point(point_list):
 
     return (x_average, y_average)
 
+def check_similarity(old_centroids, new_centroids):
+    similarity = 0
+    for i in range(len(old_centroids)):
+        similarity = similarity + ((old_centroids[i] - new_centroids[i]) / old_centroids[i])
+    similarity = similarity / range(len(old_centroids))
+    return new_centroids
+
 # Display the clusters on a plot including the centroid
 def display_clusters(centroid_dict, centroids):
     centroid_list = np.array(list(map(np.array, centroids)))
     cluster_list = []
+
     for centroid in centroids:
         cluster = np.array(list(map(np.array, centroid_dict[centroid])))
         cluster_list.append(cluster)
+
     for cluster in cluster_list:
         plt.scatter(
             cluster[:, 0], cluster[:, 1],
-            s=50, c='lightgreen',
+            s=50, c=random_hex_color(),
             marker='s', edgecolor='black',
             label='cluster 1'
         )
@@ -72,6 +87,8 @@ def k_means_clustering(data_points, number_of_centroids):
     # A dictionary containing a centroid as key.
     # A list of datapoints associated with that centroid as value.
     centroid_dict = {}
+
+    old_centroids = []
 
     # Currently set to 10 iterations.
     for _ in range(10):
