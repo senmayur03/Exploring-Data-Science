@@ -3,12 +3,16 @@ import numpy as np
 import random
 from sklearn.datasets import make_blobs
 
+# Trained model, contains list of final centroids.
+model = []
+
 # Create random clustered data points.
 X, y = make_blobs(
     n_samples = 150, n_features = 2,
     centers = 3, cluster_std = 0.5, 
     shuffle = True, random_state = 0
 )
+
 def random_hex_color():
     hex_values = "123456789ABCDEF"
     hex_value = "#"
@@ -81,14 +85,13 @@ def display_clusters(centroid_dict, centroids):
     plt.show()
 
 def k_means_clustering(data_points, number_of_centroids):
+    global model
     tuple_list = convert_array_to_tuples(data_points)
     # Randomly select n number of centroids.
     centroids = random.sample(tuple_list, number_of_centroids)
     # A dictionary containing a centroid as key.
     # A list of datapoints associated with that centroid as value.
     centroid_dict = {}
-
-    old_centroids = []
 
     # Currently set to 10 iterations.
     for _ in range(10):
@@ -106,7 +109,22 @@ def k_means_clustering(data_points, number_of_centroids):
             new_centroids.append(average_point(point_list))
         centroids = new_centroids
 
-    # Visualise the clusters.
-    display_clusters(centroid_dict, centroids)
+        return centroid_dict, centroids
 
-k_means_clustering(X, 3)
+# Prediction function, returns the closest centroid based on the given point
+def predict(centroids, points):
+    predicted_clusters = {}
+    for point in points:
+        closest_centroid = least_squared_euclidean_distance(centroids, point)
+        predicted_clusters[point] = closest_centroid
+        print("Closest Cluster: " + str(closest_centroid))
+    return predicted_clusters
+
+# Train and store the model
+centroid_dict, centroids = k_means_clustering(X, 3)
+
+# Predict on a list of points
+predicted_clusters = predict(centroids, [(1,1), (2,2), (3,3)])
+
+#Visualise Clusters
+display_clusters(centroid_dict, centroids)
