@@ -93,6 +93,8 @@ def k_means_clustering(data_points, number_of_centroids):
     # A list of datapoints associated with that centroid as value.
     centroid_dict = {}
 
+    counter = 0
+
     # Currently set to 10 iterations.
     for _ in range(10):
         # Empty the dictionary and store the new centroids.
@@ -109,7 +111,7 @@ def k_means_clustering(data_points, number_of_centroids):
             new_centroids.append(average_point(point_list))
         centroids = new_centroids
 
-        return centroid_dict, centroids
+    return centroid_dict, centroids
 
 # Prediction function, returns the closest centroid based on the given point
 def predict(centroids, points):
